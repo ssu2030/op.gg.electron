@@ -11,6 +11,12 @@
     ],
     "directories": {
       "output": "deploy"
+    },
+    "mac": {
+      "icon": "./src/resource/logo/opgglogofiles.icns"
+    },
+    "win": {
+      "icon": "./src/resource/logo/opgglogofiles.ico"
     }
   },
   "dependencies": {
