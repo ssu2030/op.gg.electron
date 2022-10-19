@@ -12,5 +12,3 @@ if (rootElement === null) {
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(<HomePage />);
-
-//RGAPI-4c72180b-7eda-41ca-936c-286bda23fcfb
