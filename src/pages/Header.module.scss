@@ -6,6 +6,7 @@
   height: 36px;
   padding: 6px 8px;
   background-color: #0c0f13;
+  -webkit-app-region: drag;
 }
 
 .Rectangle {
@@ -16,6 +17,7 @@
   background-color: #0c0f13;
   display: flex;
   flex-direction: row;
+  -webkit-app-region: no-drag;
 }
 
 .Icon01Basic16pxRefresh {
@@ -23,6 +25,7 @@
   height: 16px;
   margin: 0 2px 0 0;
   object-fit: contain;
+  -webkit-app-region: no-drag;
 }
 
 .refreshText {
@@ -30,12 +33,14 @@
   text-align: center;
   font-size: 12px;
   color: #8892a1;
+  -webkit-app-region: no-drag;
 }
 
 .iconsWrapper {
   display: flex;
   flex-direction: row;
   margin-left: auto;
+  -webkit-app-region: no-drag;
 }
 
 .iconWrapper {
@@ -45,4 +50,5 @@
   padding: 4px;
   border-radius: 4px;
   background-color: #0c0f13;
+  -webkit-app-region: no-drag;
 }
