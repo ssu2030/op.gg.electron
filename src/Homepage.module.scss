@@ -1,0 +1,19 @@
+.homePage {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  height: 100%;
+  background-color: #0c0f13;
+}
+
+.mainContentWrapper {
+  min-height: 683px;
+  height: 100%;
+}
+
+.homePageDivision {
+  width: 100%;
+  min-width: 1440px;
+  height: 1px;
+  background-color: #202530;
+}
