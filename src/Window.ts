@@ -9,7 +9,13 @@ import { isDefined } from "common/Util";
 /**
  * 밑단(Node.js)과 주고받을 수 있는 메시지의 channel의 자료형입니다.
  */
-type Channel = "ReloadCurrentWindow" | "MinimizeCurrentWindow" | "MaximizeCurrentWindow" | "CloseWholeApp" | "League";
+type Channel =
+  | "ReloadCurrentWindow"
+  | "MinimizeCurrentWindow"
+  | "MaximizeCurrentWindow"
+  | "CloseWholeApp"
+  | "lcu-connect"
+  | "lcu-request";
 
 const isRunningOnElectron = isDefined((window as any).electron);
 export { isRunningOnElectron };
@@ -80,12 +86,27 @@ export function closeWholeApp(targetWindow?: Window) {
 }
 
 /**
- * 클라이언트 실행감지
+ * connect
  */
-export function detectedRiotGames(targetWindow?: Window) {
+export function connectLeagueClient(targetWindow?: Window) {
   if (isRunningOnElectron) {
-    sendMessage(targetWindow, "League");
+    console.log("lcu-connect message recieved");
+    sendMessage(targetWindow, "lcu-connect");
+    console.log("lcu-connect message recieved");
   } else {
-    return;
+  }
+}
+/**
+ * request
+ */
+export function requestLeagueClient(
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
+  endpoint: string,
+  body: any,
+  targetWindow: Window
+) {
+  if (isRunningOnElectron) {
+    sendMessage(targetWindow, "lcu-request", method, endpoint, body);
+  } else {
   }
 }

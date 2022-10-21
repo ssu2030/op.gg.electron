@@ -6,14 +6,14 @@ import RunningStateComponent from "./layouts/RunningStateComponent";
 import { LeagueOfLegendIcon, OPGGIcon, ValorantIcon } from "common/Assets";
 
 import style from "pages/MainContent.module.scss";
-import { detectedRiotGames } from "Window";
 import classNames from "classnames";
+import { connectLeagueClient } from "Window";
 
 const MainContentComponent = () => {
   const [page, setPage] = useState<"op.gg" | "lol" | "valo">("op.gg");
 
   setInterval(() => {
-    detectedRiotGames();
+    connectLeagueClient();
     console.log("execute");
   }, 2500);
 

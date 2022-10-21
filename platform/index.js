@@ -1,5 +1,14 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
-const { authenticate } = require("league-connect");
+const {
+  authenticate,
+  createHttp2Request,
+  Credentials,
+  EventResponse,
+  JsonObjectLike,
+  LeagueClient,
+} = require("league-connect");
+// const { WebSocket } = require("ws");
+// const https = require("https");
 
 const path = require("path");
 const platformPath = path.join(app.getAppPath(), "platform");
@@ -61,6 +70,25 @@ function onRequestDevTools() {
   targetWindow.webContents.toggleDevTools();
 }
 
+async function connect() {
+  console.log("connect on node js ");
+  const credentials = await authenticate({
+    awaitConnection: true,
+    pollInterval: 5000,
+    // certificate: "-----BEGIN CERTIFICATE-----\nSowhdnAMyCertificate\n-----ENDCERTIFICATE-----",
+    // unsafe: true
+  }).then(value => {
+    console.log("!!!!!$$$$$$$!!!!!!", value);
+  });
+  console.log("credentials", credentials);
+  const client = new LeagueClient(credentials, {
+    pollInterval: 1000, // Check every second
+  });
+  console.log("client", client);
+}
+
+function request() {}
+
 app.on("ready", () => {
   globalShortcut.register("F5", onRequestReload);
   globalShortcut.register("F10", onRequestDevTools);
@@ -95,34 +123,21 @@ app.on("ready", () => {
     app.quit();
   });
 
-  ipcMain.on("League", event => {
-    console.log("league Test call");
-    LeagueClientTest();
+  ipcMain.on("lcu-connect", event => {
+    connect();
   });
+
+  // ipcMain.on("lcu-request", event => {});
+
+  // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  //   callback({
+  //     responseHeaders: {
+  //       ...details.responseHeaders,
+  //       "Content-Security-Policy": ["*"], // TODO: is this the best solution?
+  //     },
+  //   });
+  // });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
   openURL(firstWindow, `${app.getAppPath()}/dist/index.html`);
 });
-
-async function LeagueClientTest() {
-  // console.log("LeagueClientTest call");
-  // const credentials = await authenticate({
-  //   awaitConnection: true,
-  //   pollInterval: 5000,
-  //   // certificate: "-----BEGIN CERTIFICATE-----\nSowhdnAMyCertificate\n-----ENDCERTIFICATE-----",
-  //   // unsafe: true
-  // }).then(value => {
-  //   console.log("credentials", value);
-  // });
-  // console.log("credentials", credentials);
-  // const authenticationOp = {
-  //   name: "LeagueClientUx",
-  //   awaitConnection: false,
-  //   pollInterval: 2500,
-  // };
-  // const ws = await createWebSocketConnection({ authenticationOptions: authenticationOp, pollInterval: 25000 });
-  // ws.subscribe("/lol-chat/v1/conversations/active", (data, event) => {
-  //   // data: deseralized json object from the event payload
-  //   // event: the entire event (see EventResponse<T>)
-  // });
-}
