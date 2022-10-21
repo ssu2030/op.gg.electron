@@ -3,6 +3,9 @@ import MainContentComponent from "pages/MainContentComponent";
 
 import style from "Homepage.module.scss";
 
+/**
+ * main page render
+ */
 const HomePage = () => (
   <div className={style.homePage}>
     <HeaderComponent />

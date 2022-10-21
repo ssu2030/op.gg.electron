@@ -42,7 +42,7 @@ export interface AppProps {
   width?: number;
   height?: number;
 }
-/**
+/**s
  * 새로고침을 합니다.
  */
 export function reloadCurrentWindow(targetWindow?: Window) {
@@ -92,7 +92,6 @@ export function connectLeagueClient(targetWindow?: Window) {
   if (isRunningOnElectron) {
     console.log("lcu-connect message recieved");
     sendMessage(targetWindow, "lcu-connect");
-    console.log("lcu-connect message recieved");
   } else {
   }
 }

@@ -80,6 +80,7 @@ async function connect() {
   }).then(value => {
     console.log(" ===== credential", value);
     const client = new LeagueClient(value);
+    console.log(" ===== client", client);
     client.on("connect", newCredentials => {
       console.log("leagueClient", newCredentials);
     });
