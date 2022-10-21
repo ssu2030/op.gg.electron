@@ -8,11 +8,8 @@ import { LeagueOfLegendIcon, OPGGIcon, ValorantIcon } from "common/Assets";
 import style from "pages/MainContent.module.scss";
 import classNames from "classnames";
 
-import { connectLeagueClient, offMessage } from "Window";
-import type { IpcRendererEvent } from "electron";
 import { onMessage } from "../Window";
-
-type stat = "lol" | "val" | "disconnect";
+import { IpcRendererEvent } from "electron";
 
 /**
  * 왼쪽 툴페인에선 선택을 하면 현재 상태에 따라 스타일이 변하지만 추후
@@ -20,32 +17,14 @@ type stat = "lol" | "val" | "disconnect";
  */
 const MainContentComponent = () => {
   const [page, setPage] = useState<"op.gg" | "lol" | "valo">("op.gg");
-  const [gameState, setGameState] = useState<stat>("disconnect");
+  const [gameState, setGameState] = useState<string>("disconnect");
 
   setInterval(async () => {
-    const runningGameName = await connectLeagueClient();
-    //setGameState(runningGameName);
-    const onLCUReturn = (event: IpcRendererEvent, arg: any) => {
-      console.log("return!!", arg);
+    const tmp = (event: IpcRendererEvent, arg: string) => {
+      setGameState(arg);
     };
-
-    onMessage(window, "lcu-return", onLCUReturn);
-    console.log("onMessage return:", onLCUReturn);
-  }, 3000);
-
-  // useEffect(() => {
-  //   const onLCUReturn = (event: IpcRendererEvent, arg: any) => {
-  //     console.log("return!!", arg);
-  //   };
-
-  //   onMessage(window, "lcu-return", onLCUReturn);
-  //   console.log("onMessage return:", onLCUReturn);
-
-  //   return () => {
-  //     offMessage(window, "lcu-return", onLCUReturn);
-  //     console.log("offMessage return:", onLCUReturn);
-  //   };
-  // }, []);
+    onMessage(window, "lcu-return", tmp);
+  }, 5000);
 
   return (
     <div className={style.mainContentent}>

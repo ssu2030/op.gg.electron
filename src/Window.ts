@@ -120,14 +120,3 @@ export function connectLeagueClient(targetWindow?: Window) {
   } else {
   }
 }
-
-export function onLeagueConnect() {
-  if (isRunningOnElectron) {
-  }
-}
-
-/**
- * return
- */
-
-export function returnGameName() {}

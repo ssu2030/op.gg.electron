@@ -98,6 +98,8 @@ app.on("ready", () => {
   globalShortcut.register("F10", onRequestDevTools);
   globalShortcut.register("F12", onRequestDevTools);
 
+  let gameNameType = "disconnect";
+
   // 브라우저로부터 메시지 왔을 때의 동작들 등록.
   ipcMain.on("ReloadCurrentWindow", event => {
     onRequestReload();
@@ -128,9 +130,8 @@ app.on("ready", () => {
   });
 
   ipcMain.on("lcu-connect", event => {
-    const tmp = connect();
-    event.reply("lcu-return", JSON.stringify(tmp));
-    console.log("connect(): ", tmp);
+    gameNameType = connect();
+    event.reply("lcu-return", gameNameType);
   });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
