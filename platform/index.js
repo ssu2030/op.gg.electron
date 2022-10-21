@@ -63,6 +63,7 @@ function onRequestDevTools() {
 }
 
 async function connect() {
+  const stat = "disconnect";
   await authenticate({
     awaitConnection: true,
     pollInterval: 5000,
@@ -76,17 +77,21 @@ async function connect() {
         console.log("PID: %s, COMMAND: %s, ARGUMENT: %s", process.pid, process.command, process.arguments);
         const data = process.command;
         if (data.indexOf("League of Legend") >= 0) {
-          return "lol";
+          console.log("==== lol find");
+          stat = "lol";
+        } else if (data.indexOf("VALORANT") >= 0) {
+          console.log("=== valorant");
+          stat = "val";
+        } else {
+          console.log("no find");
+          stat = "disconnect";
         }
-        if (data.indexOf("VALORANT") >= 0) {
-          return "val";
-        }
-        return "none";
       } else {
         console.log("no such process found!");
       }
     });
   });
+  return;
 }
 
 app.on("ready", () => {
@@ -126,9 +131,9 @@ app.on("ready", () => {
   ipcMain.on("lcu-connect", event => {
     const tmp = connect();
     event.reply("lcu-return", JSON.stringify(tmp));
-    console.log(tmp);
+    console.log("connect(): ", tmp);
   });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
-  openURL(firstWindow, `${app.getAppPath()}/dist/index.html`);
+  openURL(firstWindow, `${app.getAppPath()}/dist/index.htsml`);
 });

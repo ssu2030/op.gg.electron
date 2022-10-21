@@ -40,8 +40,6 @@ export function onMessage(
   channel: Channel,
   listener: (event: IpcRendererEvent, arg: any) => void
 ) {
-  // Electron 환경일 경우, Preload.js에서 정의한 객체가 됩니다.
-  // 웹 환경일 경우 undefined가 됩니다.
   const { electron } = (targetWindow ?? window) as any;
 
   if (isDefined(electron)) {
@@ -54,8 +52,6 @@ export function offMessage(
   channel: Channel,
   listener: (event: IpcRendererEvent, arg: any) => void
 ) {
-  // Electron 환경일 경우, Preload.js에서 정의한 객체가 됩니다.
-  // 웹 환경일 경우 undefined가 됩니다.
   const { electron } = (targetWindow ?? window) as any;
 
   if (isDefined(electron)) {

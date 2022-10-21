@@ -25,19 +25,27 @@ const MainContentComponent = () => {
   setInterval(async () => {
     const runningGameName = await connectLeagueClient();
     //setGameState(runningGameName);
-  }, 3000);
-
-  useEffect(() => {
     const onLCUReturn = (event: IpcRendererEvent, arg: any) => {
       console.log("return!!", arg);
     };
 
     onMessage(window, "lcu-return", onLCUReturn);
+    console.log("onMessage return:", onLCUReturn);
+  }, 3000);
 
-    return () => {
-      offMessage(window, "lcu-return", onLCUReturn);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const onLCUReturn = (event: IpcRendererEvent, arg: any) => {
+  //     console.log("return!!", arg);
+  //   };
+
+  //   onMessage(window, "lcu-return", onLCUReturn);
+  //   console.log("onMessage return:", onLCUReturn);
+
+  //   return () => {
+  //     offMessage(window, "lcu-return", onLCUReturn);
+  //     console.log("offMessage return:", onLCUReturn);
+  //   };
+  // }, []);
 
   return (
     <div className={style.mainContentent}>
