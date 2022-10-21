@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import OPGGPageComponent from "./layouts/OPGGPageComponent";
 import RunningStateComponent from "./layouts/RunningStateComponent";
@@ -8,7 +8,9 @@ import { LeagueOfLegendIcon, OPGGIcon, ValorantIcon } from "common/Assets";
 import style from "pages/MainContent.module.scss";
 import classNames from "classnames";
 
-// import { connectLeagueClient } from "Window";
+import { connectLeagueClient, offMessage } from "Window";
+import type { IpcRendererEvent } from "electron";
+import { onMessage } from "../Window";
 
 type stat = "lol" | "val" | "disconnect";
 
@@ -18,11 +20,24 @@ type stat = "lol" | "val" | "disconnect";
  */
 const MainContentComponent = () => {
   const [page, setPage] = useState<"op.gg" | "lol" | "valo">("op.gg");
+  const [gameState, setGameState] = useState<stat>("disconnect");
 
-  // setInterval(() => {
-  //   connectLeagueClient();
-  //   console.log("execute");
-  // }, 2500);
+  setInterval(async () => {
+    const runningGameName = await connectLeagueClient();
+    //setGameState(runningGameName);
+  }, 3000);
+
+  useEffect(() => {
+    const onLCUReturn = (event: IpcRendererEvent, arg: any) => {
+      console.log("return!!", arg);
+    };
+
+    onMessage(window, "lcu-return", onLCUReturn);
+
+    return () => {
+      offMessage(window, "lcu-return", onLCUReturn);
+    };
+  }, []);
 
   return (
     <div className={style.mainContentent}>
@@ -35,7 +50,7 @@ const MainContentComponent = () => {
           />
         </div>
         <div
-          className={classNames(style.iconWrapper, { [style.isActive]: page === "lol" })}
+          className={classNames(style.iconWrapper, { [style.isActive]: gameState === "lol" })}
           onClick={() => {
             setPage("lol");
           }}
@@ -44,7 +59,7 @@ const MainContentComponent = () => {
           <div className={style.iconBorder} />
         </div>
         <div
-          className={classNames(style.iconWrapper, { [style.isActive]: page === "valo" })}
+          className={classNames(style.iconWrapper, { [style.isActive]: gameState === "val" })}
           onClick={() => {
             setPage("valo");
           }}
@@ -58,9 +73,12 @@ const MainContentComponent = () => {
         {page === "op.gg" ? (
           <OPGGPageComponent />
         ) : page === "lol" ? (
-          <RunningStateComponent gameName="League Of Legend" />
+          <RunningStateComponent
+            gameName="League Of Legend"
+            status={gameState === "lol" ? " 실행 중" : "실행 중이지 않음"}
+          />
         ) : page === "valo" ? (
-          <RunningStateComponent gameName="Valolant" />
+          <RunningStateComponent gameName="Valolant" status={gameState === "val" ? " 실행 중" : "실행 중이지 않음"} />
         ) : null}
       </div>
     </div>

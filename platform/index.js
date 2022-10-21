@@ -1,14 +1,6 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
-const {
-  authenticate,
-  createHttp2Request,
-  Credentials,
-  createWebSocketConnection,
-  JsonObjectLike,
-  LeagueClient,
-} = require("league-connect");
-// const { WebSocket } = require("ws");
-// const https = require("https");
+const { authenticate } = require("league-connect");
+const ps = require("ps-node");
 
 const path = require("path");
 const platformPath = path.join(app.getAppPath(), "platform");
@@ -71,45 +63,31 @@ function onRequestDevTools() {
 }
 
 async function connect() {
-  console.log(" == connect on node js ");
-  const credentials = await authenticate({
+  await authenticate({
     awaitConnection: true,
     pollInterval: 5000,
-    // certificate: "-----BEGIN CERTIFICATE-----\nSowhdnAMyCertificate\n-----ENDCERTIFICATE-----",
-    // unsafe: true
   }).then(value => {
-    console.log(" ===== credential", value);
-    const client = new LeagueClient(value);
-    console.log(" ===== client", client);
-    client.on("connect", newCredentials => {
-      console.log("leagueClient", newCredentials);
-    });
-
-    client.on("disconnect", () => {
-      console.log(" ===== league client disconnect");
+    ps.lookup({ pid: value.pid }, (err, resultList) => {
+      if (err) {
+        throw new Error(err);
+      }
+      const process = resultList[0];
+      if (process) {
+        console.log("PID: %s, COMMAND: %s, ARGUMENT: %s", process.pid, process.command, process.arguments);
+        const data = process.command;
+        if (data.indexOf("League of Legend") >= 0) {
+          return "lol";
+        }
+        if (data.indexOf("VALORANT") >= 0) {
+          return "val";
+        }
+        return "none";
+      } else {
+        console.log("no such process found!");
+      }
     });
   });
-
-  // const response = await createHttp2Request(
-  //   {
-  //     method: "GET",
-  //     url: "/lol-summoner/v1/current-summoner",
-  //   },
-  //   session,
-  //   credentials
-  // ).then(value => {
-  //   console.log("response", value);
-  // });
-
-  // Remember to close the session when done
-  // session.close();
-  // const client = new LeagueClient(credentials, {
-  //   pollInterval: 1000, // Check every second
-  // });
-  // console.log("client", client);
 }
-
-function request() {}
 
 app.on("ready", () => {
   globalShortcut.register("F5", onRequestReload);
@@ -146,19 +124,10 @@ app.on("ready", () => {
   });
 
   ipcMain.on("lcu-connect", event => {
-    connect();
+    const tmp = connect();
+    event.reply("lcu-return", JSON.stringify(tmp));
+    console.log(tmp);
   });
-
-  // ipcMain.on("lcu-request", event => {});
-
-  // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-  //   callback({
-  //     responseHeaders: {
-  //       ...details.responseHeaders,
-  //       "Content-Security-Policy": ["*"], // TODO: is this the best solution?
-  //     },
-  //   });
-  // });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
   openURL(firstWindow, `${app.getAppPath()}/dist/index.html`);

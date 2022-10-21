@@ -5,6 +5,7 @@
  */
 
 import { isDefined } from "common/Util";
+import type { IpcRendererEvent } from "electron";
 
 /**
  * 밑단(Node.js)과 주고받을 수 있는 메시지의 channel의 자료형입니다.
@@ -15,7 +16,7 @@ type Channel =
   | "MaximizeCurrentWindow"
   | "CloseWholeApp"
   | "lcu-connect"
-  | "lcu-request";
+  | "lcu-return";
 
 const isRunningOnElectron = isDefined((window as any).electron);
 export { isRunningOnElectron };
@@ -34,6 +35,34 @@ function sendMessage(targetWindow: Window | undefined | null, channel: Channel, 
   }
 }
 
+export function onMessage(
+  targetWindow: Window | undefined | null,
+  channel: Channel,
+  listener: (event: IpcRendererEvent, arg: any) => void
+) {
+  // Electron 환경일 경우, Preload.js에서 정의한 객체가 됩니다.
+  // 웹 환경일 경우 undefined가 됩니다.
+  const { electron } = (targetWindow ?? window) as any;
+
+  if (isDefined(electron)) {
+    electron.onMessage(channel, listener);
+  }
+}
+
+export function offMessage(
+  targetWindow: Window | undefined | null,
+  channel: Channel,
+  listener: (event: IpcRendererEvent, arg: any) => void
+) {
+  // Electron 환경일 경우, Preload.js에서 정의한 객체가 됩니다.
+  // 웹 환경일 경우 undefined가 됩니다.
+  const { electron } = (targetWindow ?? window) as any;
+
+  if (isDefined(electron)) {
+    electron.offMessage(channel, listener);
+  }
+}
+
 /**
  * App 편집창을 열 때 필요한 정보들입니다.
  */
@@ -42,7 +71,8 @@ export interface AppProps {
   width?: number;
   height?: number;
 }
-/**s
+
+/**
  * 새로고침을 합니다.
  */
 export function reloadCurrentWindow(targetWindow?: Window) {
@@ -90,22 +120,18 @@ export function closeWholeApp(targetWindow?: Window) {
  */
 export function connectLeagueClient(targetWindow?: Window) {
   if (isRunningOnElectron) {
-    console.log("lcu-connect message recieved");
     sendMessage(targetWindow, "lcu-connect");
   } else {
   }
 }
-/**
- * request
- */
-export function requestLeagueClient(
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
-  endpoint: string,
-  body: any,
-  targetWindow: Window
-) {
+
+export function onLeagueConnect() {
   if (isRunningOnElectron) {
-    sendMessage(targetWindow, "lcu-request", method, endpoint, body);
-  } else {
   }
 }
+
+/**
+ * return
+ */
+
+export function returnGameName() {}
