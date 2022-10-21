@@ -1,4 +1,5 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
+const { authenticate } = require("league-connect");
 
 const path = require("path");
 const platformPath = path.join(app.getAppPath(), "platform");
@@ -94,6 +95,34 @@ app.on("ready", () => {
     app.quit();
   });
 
+  ipcMain.on("League", event => {
+    console.log("league Test call");
+    LeagueClientTest();
+  });
+
   const firstWindow = createWindow({ closeAppWhenClose: true });
   openURL(firstWindow, `${app.getAppPath()}/dist/index.html`);
 });
+
+async function LeagueClientTest() {
+  // console.log("LeagueClientTest call");
+  // const credentials = await authenticate({
+  //   awaitConnection: true,
+  //   pollInterval: 5000,
+  //   // certificate: "-----BEGIN CERTIFICATE-----\nSowhdnAMyCertificate\n-----ENDCERTIFICATE-----",
+  //   // unsafe: true
+  // }).then(value => {
+  //   console.log("credentials", value);
+  // });
+  // console.log("credentials", credentials);
+  // const authenticationOp = {
+  //   name: "LeagueClientUx",
+  //   awaitConnection: false,
+  //   pollInterval: 2500,
+  // };
+  // const ws = await createWebSocketConnection({ authenticationOptions: authenticationOp, pollInterval: 25000 });
+  // ws.subscribe("/lol-chat/v1/conversations/active", (data, event) => {
+  //   // data: deseralized json object from the event payload
+  //   // event: the entire event (see EventResponse<T>)
+  // });
+}

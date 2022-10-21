@@ -1,4 +1,4 @@
-<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
     <defs>
         <clipPath id="mlmtv9adra">
             <path d="M1440 0v720H0V0h1440z"/>
@@ -13,7 +13,7 @@
     <g clip-path="url(#mlmtv9adra)" transform="translate(-18 -216)">
         <g clip-path="url(#69slpj91gb)">
             <g clip-path="url(#x9inbkqszc)" transform="translate(20.5 220)">
-                <path fill="#525A68" d="M0 0h19v16H0V0z"/>
+                <path d="M0 0h19v16H0V0z"/>
             </g>
         </g>
     </g>

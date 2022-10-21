@@ -6,9 +6,16 @@ import RunningStateComponent from "./layouts/RunningStateComponent";
 import { LeagueOfLegendIcon, OPGGIcon, ValorantIcon } from "common/Assets";
 
 import style from "pages/MainContent.module.scss";
+import { detectedRiotGames } from "Window";
+import classNames from "classnames";
 
 const MainContentComponent = () => {
   const [page, setPage] = useState<"op.gg" | "lol" | "valo">("op.gg");
+
+  setInterval(() => {
+    detectedRiotGames();
+    console.log("execute");
+  }, 2500);
 
   return (
     <div className={style.mainContentent}>
@@ -20,21 +27,23 @@ const MainContentComponent = () => {
             }}
           />
         </div>
-        <div className={style.iconWrapper}>
-          <LeagueOfLegendIcon
-            className={style.svgColor}
-            onClick={() => {
-              setPage("lol");
-            }}
-          />
+        <div
+          className={classNames(style.iconWrapper, { [style.isActive]: page === "lol" })}
+          onClick={() => {
+            setPage("lol");
+          }}
+        >
+          <LeagueOfLegendIcon className={style.icon} />
+          <div className={style.iconBorder} />
         </div>
-        <div className={style.iconWrapper}>
-          <ValorantIcon
-            className={style.svgColor}
-            onClick={() => {
-              setPage("valo");
-            }}
-          />
+        <div
+          className={classNames(style.iconWrapper, { [style.isActive]: page === "valo" })}
+          onClick={() => {
+            setPage("valo");
+          }}
+        >
+          <ValorantIcon className={style.icon} />
+          <div className={style.iconBorder} />
         </div>
       </div>
       <div className={style.mainContentDivision}></div>

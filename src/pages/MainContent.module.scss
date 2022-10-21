@@ -12,16 +12,39 @@
 
 .iconWrapper {
   box-sizing: border-box;
+  position: relative;
+
   width: 60px;
   height: 60px;
-  align-items: center;
   padding: 18px;
-  mix-blend-mode: luminosity;
-}
 
-.svgColor {
-  fill: #6c61ff !important;
-  fill-rule: nonzero !important;
+  .icon {
+    fill: #525a68;
+  }
+
+  .iconBorder {
+    position: absolute;
+
+    // 세로 가운데 정렬.
+    top: 50%;
+    transform: translateY(-50%);
+
+    right: 0;
+    width: 4px;
+    height: 24px;
+    border-radius: 8px;
+  }
+
+  //활성화 시
+  &.isActive {
+    .icon {
+      fill: #6c61ff;
+    }
+
+    .iconBorder {
+      background-color: #6c61ff;
+    }
+  }
 }
 
 .opggIconWrapper {

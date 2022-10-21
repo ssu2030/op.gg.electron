@@ -9,7 +9,7 @@ import { isDefined } from "common/Util";
 /**
  * 밑단(Node.js)과 주고받을 수 있는 메시지의 channel의 자료형입니다.
  */
-type Channel = "ReloadCurrentWindow" | "MinimizeCurrentWindow" | "MaximizeCurrentWindow" | "CloseWholeApp";
+type Channel = "ReloadCurrentWindow" | "MinimizeCurrentWindow" | "MaximizeCurrentWindow" | "CloseWholeApp" | "League";
 
 const isRunningOnElectron = isDefined((window as any).electron);
 export { isRunningOnElectron };
@@ -76,5 +76,16 @@ export function closeWholeApp(targetWindow?: Window) {
     sendMessage(targetWindow, "CloseWholeApp");
   } else {
     window.close();
+  }
+}
+
+/**
+ * 클라이언트 실행감지
+ */
+export function detectedRiotGames(targetWindow?: Window) {
+  if (isRunningOnElectron) {
+    sendMessage(targetWindow, "League");
+  } else {
+    return;
   }
 }
