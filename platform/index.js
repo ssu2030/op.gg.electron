@@ -3,7 +3,7 @@ const {
   authenticate,
   createHttp2Request,
   Credentials,
-  EventResponse,
+  createWebSocketConnection,
   JsonObjectLike,
   LeagueClient,
 } = require("league-connect");
@@ -71,32 +71,41 @@ function onRequestDevTools() {
 }
 
 async function connect() {
-  console.log("connect on node js ");
+  console.log(" == connect on node js ");
   const credentials = await authenticate({
     awaitConnection: true,
     pollInterval: 5000,
     // certificate: "-----BEGIN CERTIFICATE-----\nSowhdnAMyCertificate\n-----ENDCERTIFICATE-----",
     // unsafe: true
   }).then(value => {
-    console.log("credential", value);
-  });
-  const response = await createHttp2Request(
-    {
-      method: "GET",
-      url: "/lol-summoner/v1/current-summoner",
-    },
-    session,
-    credentials
-  ).then(value => {
-    console.log("response", response);
+    console.log(" ===== credential", value);
+    const client = new LeagueClient(value);
+    client.on("connect", newCredentials => {
+      console.log("leagueClient", newCredentials);
+    });
+
+    client.on("disconnect", () => {
+      console.log(" ===== league client disconnect");
+    });
   });
 
+  // const response = await createHttp2Request(
+  //   {
+  //     method: "GET",
+  //     url: "/lol-summoner/v1/current-summoner",
+  //   },
+  //   session,
+  //   credentials
+  // ).then(value => {
+  //   console.log("response", value);
+  // });
+
   // Remember to close the session when done
-  session.close();
-  const client = new LeagueClient(credentials, {
-    pollInterval: 1000, // Check every second
-  });
-  console.log("client", client);
+  // session.close();
+  // const client = new LeagueClient(credentials, {
+  //   pollInterval: 1000, // Check every second
+  // });
+  // console.log("client", client);
 }
 
 function request() {}
