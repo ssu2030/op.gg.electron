@@ -63,7 +63,7 @@ function onRequestDevTools() {
 }
 
 async function connect() {
-  const stat = "disconnect";
+  let stat = "disconnect";
   await authenticate({
     awaitConnection: true,
     pollInterval: 5000,
@@ -74,7 +74,6 @@ async function connect() {
       }
       const process = resultList[0];
       if (process) {
-        console.log("PID: %s, COMMAND: %s, ARGUMENT: %s", process.pid, process.command, process.arguments);
         const data = process.command;
         if (data.indexOf("League of Legend") >= 0) {
           console.log("==== lol find");
@@ -91,7 +90,7 @@ async function connect() {
       }
     });
   });
-  return;
+  return stat;
 }
 
 app.on("ready", () => {
@@ -135,5 +134,5 @@ app.on("ready", () => {
   });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
-  openURL(firstWindow, `${app.getAppPath()}/dist/index.htsml`);
+  openURL(firstWindow, `${app.getAppPath()}/dist/index.html`);
 });
