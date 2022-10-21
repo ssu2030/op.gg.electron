@@ -78,9 +78,21 @@ async function connect() {
     // certificate: "-----BEGIN CERTIFICATE-----\nSowhdnAMyCertificate\n-----ENDCERTIFICATE-----",
     // unsafe: true
   }).then(value => {
-    console.log("!!!!!$$$$$$$!!!!!!", value);
+    console.log("credential", value);
   });
-  console.log("credentials", credentials);
+  const response = await createHttp2Request(
+    {
+      method: "GET",
+      url: "/lol-summoner/v1/current-summoner",
+    },
+    session,
+    credentials
+  ).then(value => {
+    console.log("response", response);
+  });
+
+  // Remember to close the session when done
+  session.close();
   const client = new LeagueClient(credentials, {
     pollInterval: 1000, // Check every second
   });
