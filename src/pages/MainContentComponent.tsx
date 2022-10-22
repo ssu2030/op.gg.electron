@@ -10,6 +10,7 @@ import classNames from "classnames";
 
 import { onMessage } from "../Window";
 import { IpcRendererEvent } from "electron";
+import { connectLeagueClient } from "Window";
 
 /**
  * 왼쪽 툴페인에선 선택을 하면 현재 상태에 따라 스타일이 변하지만 추후
@@ -19,12 +20,13 @@ const MainContentComponent = () => {
   const [page, setPage] = useState<"op.gg" | "lol" | "valo">("op.gg");
   const [gameState, setGameState] = useState<string>("disconnect");
 
-  setInterval(async () => {
-    const tmp = (event: IpcRendererEvent, arg: string) => {
-      setGameState(arg);
-    };
-    onMessage(window, "lcu-return", tmp);
-  }, 5000);
+  // setInterval(async () => {
+  //   connectLeagueClient();
+  //   const tmp = (event: IpcRendererEvent, arg: string) => {
+  //     setGameState(arg);
+  //   };
+  //   // onMessage(window, "lcu-return", tmp);
+  // }, 5000);
 
   return (
     <div className={style.mainContentent}>

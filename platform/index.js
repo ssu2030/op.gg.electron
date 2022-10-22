@@ -69,6 +69,7 @@ async function connect() {
     pollInterval: 5000,
   }).then(value => {
     ps.lookup({ pid: value.pid }, (err, resultList) => {
+      console.log("data: [%s], [%s] , [%s]", resultList[0].pid, resultList[0].arguments, resultList[0].command);
       if (err) {
         throw new Error(err);
       }
@@ -131,7 +132,7 @@ app.on("ready", () => {
 
   ipcMain.on("lcu-connect", event => {
     gameNameType = connect();
-    event.reply("lcu-return", gameNameType);
+    //event.reply("lcu-return", gameNameType);
   });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
