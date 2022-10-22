@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import OPGGPageComponent from "./layouts/OPGGPageComponent";
 import RunningStateComponent from "./layouts/RunningStateComponent";

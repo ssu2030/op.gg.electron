@@ -65,7 +65,7 @@ function onRequestDevTools() {
 async function connect() {
   let stat = "disconnect";
   await authenticate({
-    awaitConnection: true,
+    awaitConnection: false,
     pollInterval: 5000,
   }).then(value => {
     ps.lookup({ pid: value.pid }, (err, resultList) => {
