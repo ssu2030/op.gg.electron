@@ -20,13 +20,13 @@ const MainContentComponent = () => {
   const [page, setPage] = useState<"op.gg" | "lol" | "valo">("op.gg");
   const [gameState, setGameState] = useState<string>("disconnect");
 
-  // setInterval(async () => {
-  //   connectLeagueClient();
-  //   const tmp = (event: IpcRendererEvent, arg: string) => {
-  //     setGameState(arg);
-  //   };
-  //   // onMessage(window, "lcu-return", tmp);
-  // }, 5000);
+  setInterval(async () => {
+    connectLeagueClient();
+    const tmp = (event: IpcRendererEvent, arg: string) => {
+      setGameState(arg);
+    };
+    // onMessage(window, "lcu-return", tmp);
+  }, 5000);
 
   return (
     <div className={style.mainContentent}>

@@ -132,7 +132,7 @@ app.on("ready", () => {
 
   ipcMain.on("lcu-connect", event => {
     gameNameType = connect();
-    //event.reply("lcu-return", gameNameType);
+    event.reply("lcu-return", JSON.stringify(gameNameType));
   });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
