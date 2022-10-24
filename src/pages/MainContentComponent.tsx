@@ -8,9 +8,8 @@ import { LeagueOfLegendIcon, OPGGIcon, ValorantIcon } from "common/Assets";
 import style from "pages/MainContent.module.scss";
 import classNames from "classnames";
 
-import { onMessage } from "../Window";
 import { IpcRendererEvent } from "electron";
-import { connectLeagueClient } from "Window";
+import { connectLeagueClient, onMessage } from "Window";
 
 /**
  * 왼쪽 툴페인에선 선택을 하면 현재 상태에 따라 스타일이 변하지만 추후
@@ -21,12 +20,17 @@ const MainContentComponent = () => {
   const [gameState, setGameState] = useState<string>("disconnect");
 
   setInterval(async () => {
-    connectLeagueClient();
-    const tmp = (event: IpcRendererEvent, arg: string) => {
-      setGameState(arg);
-    };
-    // onMessage(window, "lcu-return", tmp);
+    if (gameState === "disconnect") {
+      connectLeagueClient();
+      const tmp = (event: IpcRendererEvent, arg: string) => {
+        // console.log("input data!!", arg);
+        // setGameState(arg);
+      };
+      onMessage(window, "lcu-return", tmp);
+    }
   }, 5000);
+
+  console.log("=== game state: ", gameState);
 
   return (
     <div className={style.mainContentent}>
@@ -39,7 +43,7 @@ const MainContentComponent = () => {
           />
         </div>
         <div
-          className={classNames(style.iconWrapper, { [style.isActive]: gameState === "lol" })}
+          className={classNames(style.iconWrapper, { [style.isActive]: page === "lol" })}
           onClick={() => {
             setPage("lol");
           }}
@@ -48,7 +52,7 @@ const MainContentComponent = () => {
           <div className={style.iconBorder} />
         </div>
         <div
-          className={classNames(style.iconWrapper, { [style.isActive]: gameState === "val" })}
+          className={classNames(style.iconWrapper, { [style.isActive]: page === "valo" })}
           onClick={() => {
             setPage("valo");
           }}

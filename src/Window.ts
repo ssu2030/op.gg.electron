@@ -43,6 +43,8 @@ export function onMessage(
   const { electron } = (targetWindow ?? window) as any;
 
   if (isDefined(electron)) {
+    console.log("onMessage Defined");
+    console.log("onMessage Channel", channel);
     electron.onMessage(channel, listener);
   }
 }
@@ -120,3 +122,5 @@ export function connectLeagueClient(targetWindow?: Window) {
   } else {
   }
 }
+
+//export function returnGameName() {}

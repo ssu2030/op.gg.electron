@@ -65,6 +65,7 @@ function onRequestDevTools() {
 async function connect() {
   let stat = "disconnect";
   await authenticate({
+    name: "LeagueClientUx",
     awaitConnection: false,
     pollInterval: 5000,
   }).then(value => {
@@ -76,7 +77,7 @@ async function connect() {
       const process = resultList[0];
       if (process) {
         const data = process.command;
-        if (data.indexOf("League of Legend") >= 0) {
+        if (data.indexOf("League") >= 0) {
           console.log("==== lol find");
           stat = "lol";
         } else if (data.indexOf("VALORANT") >= 0) {
@@ -132,6 +133,7 @@ app.on("ready", () => {
 
   ipcMain.on("lcu-connect", event => {
     gameNameType = connect();
+    console.log("electron  gameNameType", gameNameType);
     event.reply("lcu-return", JSON.stringify(gameNameType));
   });
 
