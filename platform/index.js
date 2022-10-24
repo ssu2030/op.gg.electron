@@ -63,21 +63,30 @@ function onRequestDevTools() {
 }
 
 async function connect() {
-  let stat = "disconnect";
-  await authenticate({
-    name: "LeagueClientUx",
-    awaitConnection: false,
-    pollInterval: 5000,
-  }).then(value => {
+  let value;
+
+  try {
+    value = await authenticate({
+      name: "LeagueClientUx",
+      awaitConnection: false,
+      pollInterval: 5000,
+    });
+  } catch {
+    return "disconnect";
+  }
+
+  return new Promise((resolve, reject) => {
     ps.lookup({ pid: value.pid }, (err, resultList) => {
-      console.log("data: [%s], [%s] , [%s]", resultList[0].pid, resultList[0].arguments, resultList[0].command);
+      console.log({ pid: resultList[0].pid, args: resultList[0].arguments, command: resultList[0].command });
       if (err) {
-        throw new Error(err);
+        resolve("disconnect");
+        return;
       }
       const process = resultList[0];
       if (process) {
+        let stat = "disconnect";
         const data = process.command;
-        if (data.indexOf("League") >= 0) {
+        if (data.indexOf("League of Legend") >= 0) {
           console.log("==== lol find");
           stat = "lol";
         } else if (data.indexOf("VALORANT") >= 0) {
@@ -87,20 +96,19 @@ async function connect() {
           console.log("no find");
           stat = "disconnect";
         }
+        resolve(stat);
       } else {
+        resolve("disconnect");
         console.log("no such process found!");
       }
     });
   });
-  return stat;
 }
 
 app.on("ready", () => {
   globalShortcut.register("F5", onRequestReload);
   globalShortcut.register("F10", onRequestDevTools);
   globalShortcut.register("F12", onRequestDevTools);
-
-  let gameNameType = "disconnect";
 
   // 브라우저로부터 메시지 왔을 때의 동작들 등록.
   ipcMain.on("ReloadCurrentWindow", event => {
@@ -131,10 +139,10 @@ app.on("ready", () => {
     app.quit();
   });
 
-  ipcMain.on("lcu-connect", event => {
-    gameNameType = connect();
+  ipcMain.on("lcu-connect", async event => {
+    const gameNameType = await connect();
     console.log("electron  gameNameType", gameNameType);
-    event.reply("lcu-return", JSON.stringify(gameNameType));
+    event.reply("lcu-return", gameNameType);
   });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
