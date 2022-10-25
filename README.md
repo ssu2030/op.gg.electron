@@ -54,6 +54,20 @@ npm run build
 npm run electron-build
 ```
 
+### 05. 실행화면
+##### 01. 메인 페이지
+![1](https://user-images.githubusercontent.com/31645582/197677942-3979f23b-2b1f-47e2-b4a8-ecde690e9e26.PNG)
+
+##### 02. league of legend 실행 중 일 때
+![3](https://user-images.githubusercontent.com/31645582/197678034-44da9f46-15eb-443d-87ac-92d538e7af9a.PNG)
+
+##### 03. league of legend 실행 중이 아닐 때
+![2](https://user-images.githubusercontent.com/31645582/197678095-33358e04-1dac-4ca4-8ee8-e35ffb3ef708.PNG)
+
+### 06. 주요 패키지 
+- league connect
+- ps-node
+
 
 
 
