@@ -66,7 +66,19 @@ npm run electron-build
 
 ### 06. 주요 패키지 
 - league connect
+  - lcu api wrapping
 - ps-node
+  - 실행중인 프로세스 데이터 확인을 위함
+
+### 07. 구현사항
+- 헤더: 새로고침, 최대, 최소, 닫기 구현 (구현 완료)
+- 메인 페이지 
+  - op.gg: iframe 이용 op.gg 연결 (구현 완료)
+  - 롤 실행 페이지: 롤 실행 중 일때 (구현 완료)  
+  - 발로란트 실행페이지: 발로란트 실행 중 일때 **(구현 미진)**
+    - 사유: riot client 실행 이후, valorant의 경우 어떤 call 로 실행중인지에 대한 확인 기능 구현하지 못함
+    - league-connect를 이용하여, RiotClientUX를 args로 주게 될 경우 현재 실행중인 client에 대한 state를 가져올 수 있지만 발로란트 관련해서 알 수 있는 방법을 찾지 못했습니다.
+
 
 
 
