@@ -14,6 +14,8 @@ git clone https://github.com/ssu2030/op.gg.electron.git
 git clone git@github.com:ssu2030/op.gg.electron.git
 ```
 
+- 이후 ps-node-search branch로 이동 
+
 - `npm install`을 실행하여 필요한 라이브러리들을 설치하세요. 
   - package-lock.json 파일이 생성됩니다. 
 
