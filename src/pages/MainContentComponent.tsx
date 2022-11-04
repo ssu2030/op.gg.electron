@@ -10,7 +10,6 @@ import classNames from "classnames";
 
 import { IpcRendererEvent } from "electron";
 import { connectLeagueClient, offMessage, onMessage } from "Window";
-
 /**
  * 왼쪽 툴페인에선 선택을 하면 현재 상태에 따라 변함
  */
@@ -18,11 +17,18 @@ const MainContentComponent = () => {
   const [page, setPage] = useState<"op.gg" | "lol" | "valo">("op.gg");
   const [gameState, setGameState] = useState<string>("disconnect");
 
-  setInterval(async () => {
-    if (gameState === "disconnect") {
-      connectLeagueClient();
-    }
+  let isGameRunningState = gameState !== "disconnect";
+
+  let connect = setInterval(async () => {
+    if (!isGameRunningState)
+      if (gameState === "disconnect") {
+        connectLeagueClient();
+      } else {
+        clearInterval(connect);
+      }
   }, 5000);
+
+  connect;
 
   useEffect(() => {
     const tmp = (event: IpcRendererEvent, arg: string) => {
