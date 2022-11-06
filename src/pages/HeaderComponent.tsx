@@ -3,6 +3,9 @@ import { CloseIcon, MaximizeIcon, MinimizeIcon, RefreshIcon } from "common/Asset
 import style from "pages/Header.module.scss";
 import { minimizeCurrentWindow, maximizeCurrentWindow, closeWholeApp, reloadCurrentWindow } from "Window";
 
+/**
+ * 헤더 컴포넌트 새로고침 최소화 최대화 닫기 기능을 위함
+ */
 const HeaderComponent = () => (
   <div className={style.BG}>
     <div className={style.Rectangle}>

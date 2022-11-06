@@ -1,14 +1,5 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
-const {
-  authenticate,
-  createHttp2Request,
-  Credentials,
-  createWebSocketConnection,
-  JsonObjectLike,
-  LeagueClient,
-} = require("league-connect");
-// const { WebSocket } = require("ws");
-// const https = require("https");
+const { authenticate } = require("league-connect");
 
 const path = require("path");
 const platformPath = path.join(app.getAppPath(), "platform");
@@ -69,47 +60,18 @@ function onRequestDevTools() {
   }
   targetWindow.webContents.toggleDevTools();
 }
-
 async function connect() {
-  console.log(" == connect on node js ");
-  const credentials = await authenticate({
-    awaitConnection: true,
-    pollInterval: 5000,
-    // certificate: "-----BEGIN CERTIFICATE-----\nSowhdnAMyCertificate\n-----ENDCERTIFICATE-----",
-    // unsafe: true
-  }).then(value => {
-    console.log(" ===== credential", value);
-    const client = new LeagueClient(value);
-    console.log(" ===== client", client);
-    client.on("connect", newCredentials => {
-      console.log("leagueClient", newCredentials);
+  try {
+    value = await authenticate({
+      name: "LeagueClientUx",
+      awaitConnection: false,
+      pollInterval: 5000,
     });
-
-    client.on("disconnect", () => {
-      console.log(" ===== league client disconnect");
-    });
-  });
-
-  // const response = await createHttp2Request(
-  //   {
-  //     method: "GET",
-  //     url: "/lol-summoner/v1/current-summoner",
-  //   },
-  //   session,
-  //   credentials
-  // ).then(value => {
-  //   console.log("response", value);
-  // });
-
-  // Remember to close the session when done
-  // session.close();
-  // const client = new LeagueClient(credentials, {
-  //   pollInterval: 1000, // Check every second
-  // });
-  // console.log("client", client);
+  } catch {
+    return "disconnect";
+  }
+  return "lol";
 }
-
-function request() {}
 
 app.on("ready", () => {
   globalShortcut.register("F5", onRequestReload);
@@ -145,20 +107,11 @@ app.on("ready", () => {
     app.quit();
   });
 
-  ipcMain.on("lcu-connect", event => {
-    connect();
+  ipcMain.on("lcu-connect", async event => {
+    const gameNameType = await connect();
+    console.log("electron  gameNameType", gameNameType);
+    event.reply("lcu-return", gameNameType);
   });
-
-  // ipcMain.on("lcu-request", event => {});
-
-  // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-  //   callback({
-  //     responseHeaders: {
-  //       ...details.responseHeaders,
-  //       "Content-Security-Policy": ["*"], // TODO: is this the best solution?
-  //     },
-  //   });
-  // });
 
   const firstWindow = createWindow({ closeAppWhenClose: true });
   openURL(firstWindow, `${app.getAppPath()}/dist/index.html`);
