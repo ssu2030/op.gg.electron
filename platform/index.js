@@ -1,6 +1,5 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
 const { authenticate } = require("league-connect");
-const ps = require("ps-node");
 
 const path = require("path");
 const platformPath = path.join(app.getAppPath(), "platform");
@@ -61,10 +60,7 @@ function onRequestDevTools() {
   }
   targetWindow.webContents.toggleDevTools();
 }
-
 async function connect() {
-  let value;
-
   try {
     value = await authenticate({
       name: "LeagueClientUx",
@@ -74,35 +70,7 @@ async function connect() {
   } catch {
     return "disconnect";
   }
-
-  return new Promise((resolve, reject) => {
-    ps.lookup({ pid: value.pid }, (err, resultList) => {
-      console.log({ pid: resultList[0].pid, args: resultList[0].arguments, command: resultList[0].command });
-      if (err) {
-        resolve("disconnect");
-        return;
-      }
-      const process = resultList[0];
-      if (process) {
-        let stat = "disconnect";
-        const data = process.command;
-        if (data.indexOf("League of Legend") >= 0) {
-          console.log("==== lol find");
-          stat = "lol";
-        } else if (data.indexOf("VALORANT") >= 0) {
-          console.log("=== valorant");
-          stat = "val";
-        } else {
-          console.log("no find");
-          stat = "disconnect";
-        }
-        resolve(stat);
-      } else {
-        resolve("disconnect");
-        console.log("no such process found!");
-      }
-    });
-  });
+  return "lol";
 }
 
 app.on("ready", () => {

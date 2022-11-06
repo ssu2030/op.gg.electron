@@ -20,11 +20,13 @@
     }
   },
   "dependencies": {
+    "@fightmegg/riot-api": "^0.0.8",
     "classnames": "^2.3.2",
     "league-connect": "^6.0.0-rc8",
     "ps-node": "^0.1.6",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "riot-api": "^0.1.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.3.1",
