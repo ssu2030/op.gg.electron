@@ -1,5 +1,5 @@
 # op.gg.electron
-- 개요: op.gg electron 엔지니어 사전 과제
+- 개요: op.gg electron 앱 만들기 
 
 ### 01. Prerequisites
 - install [Node.js & npm](https://nodejs.org/)
